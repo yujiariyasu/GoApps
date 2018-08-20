@@ -1,0 +1,19 @@
+#!/bin/bash
+echo domainexplorerをビルドします...
+go build -o domainexplorer
+echo synonymsをビルドします...
+cd ../synonyms
+go build -o ../domainexplorer/lib/synonyms
+echo availableをビルドします...
+cd ../available
+go build -o ../domainexplorer/lib/available
+echo sprinkleをビルドします...
+cd ../sprinkle
+go build -o ../domainexplorer/lib/sprinkle
+echo coolifyをビルドします...
+cd ../coolify
+go build -o ../domainexplorer/lib/coolify
+echo domainifyをビルドします...
+cd ../domainify
+go build -o ../domainexplorer/lib/domainify
+echo 完了
