@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/yujiariyasu/DomainExplorer/thesaurus"
+	"github.com/yujiariyasu/GoApps/DomainExplorer/thesaurus"
 	"log"
 	"os"
 )
