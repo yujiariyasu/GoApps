@@ -5,11 +5,11 @@ import (
 	"github.com/stretchr/gomniauth"
 	"github.com/stretchr/gomniauth/providers/google"
 	"github.com/stretchr/objx"
+	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
 	"sync"
-	"text/template"
 )
 
 var avatars Avatar = TryAvatars{
