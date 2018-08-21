@@ -41,9 +41,9 @@ func main() {
 	var addr = flag.String("addr", ":8080", "アプリケーションのアドレス")
 	flag.Parse() // フラグを解釈
 	// Gomniauthのセットアップ
-	gomniauth.SetSecurityKey("fdafalgroighondksga")
+	gomniauth.SetSecurityKey("セキュリティキー")
 	gomniauth.WithProviders(
-		google.New("796499132559-pdj56df4nedqqt0d9kv01qgi6nqsqvnq.apps.googleusercontent.com", "AnugXO52hrplBhLlRrkbutnq", "http://localhost:8080/auth/callback/google"),
+		google.New("クライアントID", "秘密の値", "http://localhost:8080/auth/callback/google"),
 	)
 	r := newRoom()
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
