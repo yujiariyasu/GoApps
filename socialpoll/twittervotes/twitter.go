@@ -6,6 +6,10 @@ import (
 	"io"
 	"log"
 	"net"
+	"net/http"
+	"net/url"
+	"strconv"
+	"sync"
 	"time"
 )
 
@@ -42,7 +46,7 @@ var (
 	creds      *oauth.Credentials
 )
 
-// 環境変数を読み込んでOAuthオブジェクトをセットアップする
+// 環境変数を読み込んで、リクエスト認証のためのOAuthオブジェクトをセットアップする
 func setupTwitterAuth() {
 	var ts struct {
 		ConsumerKey    string `env:"SP_TWITTER_KEY,required"`
@@ -63,4 +67,23 @@ func setupTwitterAuth() {
 			Secret: ts.ConsumerSecret,
 		},
 	}
+}
+
+var (
+	authSetupOnce sync.Once
+	httpClient    *http.Client
+)
+
+func makeRequest(req *http.Request, params url.Values) (*http.Response, error) {
+	authSetupOnce.Do(func() {
+		setupTwitterAuth()
+		httpClient = &http.Client{
+			Transport: &http.Transport{Dial: dial},
+		}
+	})
+	formEnc := params.Encode()
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-Length", strconv.Itoa(len(formEnc)))
+	req.Header.Set("Authorization", authClient.AuthorizationHeader(creds, "POST", req.URL, params))
+	return httpClient.Do(req)
 }
