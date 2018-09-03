@@ -70,7 +70,10 @@ func main() {
 		stopChan <- struct{}{}
 		closeConn()
 	}()
+	// プログラムを終了せようとした時にsignalChanにシグナルを送るように設定
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
+
+	// MongoDBに接続
 	if err := dialdb(); err != nil {
 		log.Fatalln("MongoDBへのダイヤルに失敗しました:", err)
 	}
@@ -94,5 +97,4 @@ func main() {
 	<-twitterStoppedChan
 	close(votes)
 	<-publisherStoppedChan
-
 }

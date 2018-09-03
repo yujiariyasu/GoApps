@@ -12,7 +12,7 @@ nsqlookupd
 nsqd --lookupd-tcp-address=localhost:4160
 ```
 
-- mongodを起動してデータ関連のサービスを実行する(データの保管先には好きな場所を指定できる)
+- mongodを起動してデータ関連のサービスを実行する(データの保管先には好きな場所を指定)
 
 ```
 mongod --dbpath ./db
