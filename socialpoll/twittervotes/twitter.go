@@ -101,14 +101,9 @@ func readFromTwitter(votes chan<- string) {
 		log.Println("選択肢の読み込みに失敗しました:", err)
 		return
 	}
-	u, err := url.Parse("https://stream.twitter.com/1.1/statuses/filter.json")
-	if err != nil {
-		log.Println("URLの解析に失敗しました:", err)
-		return
-	}
 	query := make(url.Values)
 	query.Set("track", strings.Join(options, ","))
-	req, err := http.NewRequest("POST", u.String(), strings.NewReader(query.Encode()))
+	req, err := http.NewRequest("POST", "https://stream.twitter.com/1.1/statuses/filter.json", strings.NewReader(query.Encode()))
 	if err != nil {
 		log.Println("検索のリクエストの作成に失敗しました:", err)
 		return
@@ -120,6 +115,7 @@ func readFromTwitter(votes chan<- string) {
 	}
 	reader := resp.Body
 	decoder := json.NewDecoder(reader)
+	// 無限ループ、接続が閉じられたなどの理由でエラーが発生したら抜ける
 	for {
 		var tweet tweet
 		if err := decoder.Decode(&tweet); err != nil {
@@ -138,11 +134,12 @@ func readFromTwitter(votes chan<- string) {
 }
 
 func startTwitterStream(stopchan <-chan struct{}, votes chan<- string) <-chan struct{} {
-	stoppedchan := make(chan struct{}, 1)
+	stoppedchan := make(chan struct{}, 1) // goroutineの完了を伝えるためのチャネル
 	go func() {
 		defer func() {
 			stoppedchan <- struct{}{}
 		}()
+		// チャネルへのメッセージを待機
 		for {
 			select {
 			case <-stopchan:
@@ -150,9 +147,9 @@ func startTwitterStream(stopchan <-chan struct{}, votes chan<- string) <-chan st
 				return
 			default:
 				log.Println("Twitterに問い合わせます...")
-				readFromTwitter(votes)
+				readFromTwitter(votes) // 関数内無限ループあり、接続が閉じられたりすると下の処理へ進む
 				log.Println(" (待機中)")
-				time.Sleep(10 * time.Second) // 待機してから再接続します
+				time.Sleep(10 * time.Second) // 待機してから再接続
 			}
 		}
 	}()
