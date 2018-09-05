@@ -17,3 +17,5 @@ nsqd --lookupd-tcp-address=localhost:4160
 ```
 mongod --dbpath ./db
 ```
+
+学習中につき、整理のためにコメント手厚く書くことにします
