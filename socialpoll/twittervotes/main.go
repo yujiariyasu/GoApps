@@ -44,7 +44,7 @@ func loadOptions() ([]string, error) {
 func publishVotes(votes <-chan string) <-chan struct{} {
 	stopchan := make(chan struct{}, 1)
 	pub, _ := nsq.NewProducer("localhost:4150", nsq.NewConfig())
-	// 投票を待ち、それをDBにパブリッシュする。votesチャネルが閉じられたらfor文を抜けてstopChanにシグナルを送る
+	// 投票を待ち、それをNSQにパブリッシュする。votesチャネルが閉じられたらfor文を抜けてstopChanにシグナルを送る
 	go func() {
 		// 以下のfor文では、チャネルであるvotesから定期的に値を読みだしている。
 		// votesチャネルを継続的にチェックしているが、チャネルを閉じることでループを終了させることができる。
