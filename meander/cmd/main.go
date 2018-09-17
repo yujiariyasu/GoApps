@@ -2,13 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/yujiariyasu/GoApps/meander"
 	"net/http"
 	"os"
 	"runtime"
 	"strconv"
 	"strings"
-
-	"github.com/oreilly-japan/go-programming-blueprints/chapter7/meander"
 )
 
 func main() {
