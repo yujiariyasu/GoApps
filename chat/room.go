@@ -3,9 +3,9 @@ package main
 import (
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/objx"
+	"github.com/yujiariyasu/GoApps/trace"
 	"log"
 	"net/http"
-	"trace"
 )
 
 type room struct {
