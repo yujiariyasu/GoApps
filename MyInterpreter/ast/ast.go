@@ -20,9 +20,19 @@ type Expression interface {
 	expressionNode()
 }
 
+type Identifier struct {
+	Token token.Token // token.IDENT トークン
+	Value string
+}
+
 type ExpressionStatement struct {
 	Token      token.Token // 式の最初のトークン
 	Expression Expression
+}
+
+type IntegerLiteral struct {
+	Token token.Token
+	Value int64
 }
 
 type Program struct {
@@ -91,11 +101,10 @@ func (es *ExpressionStatement) String() string {
 	return ""
 }
 
-type Identifier struct {
-	Token token.Token // token.IDENT トークン
-	Value string
-}
-
 func (i *Identifier) expressionNode()      {}
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 func (i *Identifier) String() string       { return i.Value }
+
+func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
+func (il *IntegerLiteral) String() string       { return il.Token.Literal }
+func (il *IntegerLiteral) expressionNode()      {}
