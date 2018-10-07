@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-func TestLetStatement(t testing.T) {
-	input = `
+func TestLetStatement(t *testing.T) {
+	input := `
 let x = 5;
 let y = 10;
 let foobar = 838383;
@@ -29,15 +29,15 @@ let foobar = 838383;
 		{"foobar"},
 	}
 	for i, tt := range tests {
-		stmt := program.statements[i]
-		if !testLetStatement(t, stmt, tt.expectedIdentifier)
+		stmt := program.Statements[i]
+		if !testLetStatement(t, stmt, tt.expectedIdentifier) {
 			return
 		}
 	}
 }
 
-func testLetStatement(t testing.T, s ast.Statement, name string) bool {
-	if s.Token.Literal != "let" {
+func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
+	if s.TokenLiteral() != "let" {
 		t.Fatalf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
 		return false
 	}
