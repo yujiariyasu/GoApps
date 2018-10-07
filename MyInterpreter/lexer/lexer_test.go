@@ -1,30 +1,32 @@
 package lexer
 
 import (
-	"fmt"
-	"github.com/yujiariyasu/GoApps/MyInterpreter/token"
 	"testing"
+
+	"github.com/yujiariyasu/GoApps/MyInterpreter/token"
 )
 
 func TestNextToken(t *testing.T) {
-	fmt.Println(1)
 	input := `let five = 5;
-		let ten = 10;
+let ten = 10;
 
-		let add = fn(x, y) {
-			x + y;
-		};
+let add = fn(x, y) {
+  x + y;
+};
 
-		let result = add(five, ten);
-		!-/*5;
-		5 < 10 > 5;
-		if (5 < 10) {
-			return true;
-		} else {
-			return false;
-		}
-		== !=
-	`
+let result = add(five, ten);
+!-/*5;
+5 < 10 > 5;
+
+if (5 < 10) {
+	return true;
+} else {
+	return false;
+}
+
+10 == 10;
+10 != 9;
+`
 
 	tests := []struct {
 		expectedType    token.TokenType
@@ -75,7 +77,7 @@ func TestNextToken(t *testing.T) {
 		{token.INT, "5"},
 		{token.LT, "<"},
 		{token.INT, "10"},
-		{token.RT, ">"},
+		{token.GT, ">"},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
 		{token.IF, "if"},
@@ -95,14 +97,22 @@ func TestNextToken(t *testing.T) {
 		{token.FALSE, "false"},
 		{token.SEMICOLON, ";"},
 		{token.RBRACE, "}"},
+		{token.INT, "10"},
 		{token.EQ, "=="},
+		{token.INT, "10"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "10"},
 		{token.NOT_EQ, "!="},
+		{token.INT, "9"},
+		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
 
 	l := New(input)
+
 	for i, tt := range tests {
 		tok := l.NextToken()
+
 		if tok.Type != tt.expectedType {
 			t.Fatalf("tests[%d] - tokentype wrong. expected=%q, got=%q",
 				i, tt.expectedType, tok.Type)
