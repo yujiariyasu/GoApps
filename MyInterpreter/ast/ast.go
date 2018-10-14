@@ -20,6 +20,10 @@ type Expression interface {
 	expressionNode()
 }
 
+type Program struct {
+	Statements []Statement
+}
+
 type Identifier struct {
 	Token token.Token // token.IDENT トークン
 	Value string
@@ -35,8 +39,28 @@ type IntegerLiteral struct {
 	Value int64
 }
 
-type Program struct {
-	Statements []Statement
+type PrefixExpression struct {
+	Token    token.Token
+	Operator string
+	Right    Expression
+}
+
+type LetStatement struct {
+	Token token.Token // the token.LET token
+	Name  *Identifier
+	Value Expression
+}
+
+type ReturnStatement struct {
+	Token       token.Token // "return" トークン
+	ReturnValue Expression
+}
+
+type InfixExpression struct {
+	Token    token.Token
+	Left     Expression
+	Operator string
+	Right    Expression
 }
 
 func (p *Program) TokenLiteral() string {
@@ -53,17 +77,6 @@ func (p *Program) String() string {
 		out.WriteString(s.String())
 	}
 	return out.String()
-}
-
-type LetStatement struct {
-	Token token.Token // token.LET トークン
-	Name  *Identifier
-	Value Expression
-}
-
-type ReturnStatement struct {
-	Token       token.Token // "return" トークン
-	ReturnValue Expression
 }
 
 func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
@@ -108,3 +121,27 @@ func (i *Identifier) String() string       { return i.Value }
 func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }
 func (il *IntegerLiteral) String() string       { return il.Token.Literal }
 func (il *IntegerLiteral) expressionNode()      {}
+
+func (pe *PrefixExpression) TokenLiteral() string { return pe.Token.Literal }
+func (pe PrefixExpression) expressionNode()       {}
+func (pe PrefixExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("(")
+	out.WriteString(pe.Operator)
+	out.WriteString(pe.Right.String())
+	out.WriteString(")")
+	return out.String()
+	return pe.Token.Literal
+}
+
+func (ie *InfixExpression) TokenLiteral() string { return ie.Token.Literal }
+func (ie *InfixExpression) expressionNode()      {}
+func (ie *InfixExpression) String() string {
+	var out bytes.Buffer
+	out.WriteString("(")
+	out.WriteString(ie.Left.String())
+	out.WriteString(ie.Operator)
+	out.WriteString(ie.Right.String())
+	out.WriteString(")")
+	return out.String()
+}

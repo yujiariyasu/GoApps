@@ -4,7 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/yujiariyasu/GoApps/MyInterpreter/lexer"
-	"github.com/yujiariyasu/GoApps/MyInterpreter/token"
+	"github.com/yujiariyasu/GoApps/MyInterpreter/parser"
+	// "github.com/yujiariyasu/GoApps/MyInterpreter/token"
 	"io"
 )
 
@@ -21,8 +22,8 @@ func Start(in io.Reader, out io.Writer) {
 		}
 		line := scanner.Text()
 		l := lexer.New(line)
-		for tok := l.NextToken(); tok.Type != token.EOF; tok = l.NextToken() {
-			fmt.Printf("%+v\n", tok)
-		}
+		p := parser.New(l)
+		program := p.ParseProgram()
+		fmt.Printf("%+v", program)
 	}
 }
