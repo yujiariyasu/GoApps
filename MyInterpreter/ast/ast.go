@@ -151,6 +151,6 @@ func (ie *InfixExpression) String() string {
 	return out.String()
 }
 
-func (b Boolean) TokenLiteral() string { return b.Token.Literal }
-func (b Boolean) ExpressionNode()      {}
-func (b Boolean) String() string       { return b.Token.Literal }
+func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
+func (b *Boolean) expressionNode()      {}
+func (b *Boolean) String() string       { return b.Token.Literal }
